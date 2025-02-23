@@ -1,8 +1,10 @@
 package tn.esprit.tpfoyer.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import tn.esprit.tpfoyer.entity.Bloc;
+import org.springframework.stereotype.Repository;
 import tn.esprit.tpfoyer.entity.Chambre;
+@Repository
 
-public interface ChambreRepository extends JpaRepository<Chambre, Long> {
+public interface ChambreRepository extends JpaRepository<Chambre,Long>{
+
 }
