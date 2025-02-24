@@ -10,7 +10,7 @@ import java.util.List;
 @Service
 @AllArgsConstructor
 public class ChambreServiceImpl implements  IChambreService {
-    @Autowired
+   //@Autowired
     public ChambreRepository chambreRepository;
 
     public List<Chambre> retrieveAllChambres() {

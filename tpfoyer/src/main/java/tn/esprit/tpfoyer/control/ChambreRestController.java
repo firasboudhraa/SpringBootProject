@@ -12,7 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @RequestMapping("/chambre")
 public class ChambreRestController {
-    @Autowired
+   // @Autowired
     public IChambreService chambreService;
     // http://localhost:8089/tpfoyer/chambre/retrieve-all-chambres
     @GetMapping("/retrieve-all-chambres")
