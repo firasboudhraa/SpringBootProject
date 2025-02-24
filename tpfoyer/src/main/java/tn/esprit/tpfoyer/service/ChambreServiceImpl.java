@@ -1,6 +1,7 @@
 package tn.esprit.tpfoyer.service;
 
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tn.esprit.tpfoyer.entity.Chambre;
@@ -10,7 +11,7 @@ import java.util.List;
 @Service
 @AllArgsConstructor
 public class ChambreServiceImpl implements  IChambreService {
-   //@Autowired
+   @Autowired
     public ChambreRepository chambreRepository;
 
     public List<Chambre> retrieveAllChambres() {

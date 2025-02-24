@@ -1,6 +1,7 @@
 package tn.esprit.tpfoyer.control;
 
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import tn.esprit.tpfoyer.entity.Chambre;
@@ -9,10 +10,11 @@ import tn.esprit.tpfoyer.service.IChambreService;
 import java.util.List;
 
 @RestController
+@NoArgsConstructor
 @AllArgsConstructor
 @RequestMapping("/chambre")
 public class ChambreRestController {
-   // @Autowired
+   @Autowired
     public IChambreService chambreService;
     // http://localhost:8089/tpfoyer/chambre/retrieve-all-chambres
     @GetMapping("/retrieve-all-chambres")
