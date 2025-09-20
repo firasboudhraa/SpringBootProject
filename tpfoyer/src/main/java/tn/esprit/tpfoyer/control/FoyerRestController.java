@@ -32,7 +32,7 @@ public class FoyerRestController {
         return foyer;
     }
 
-    // http://localhost:8089/tpfoyer/etudiant/add-etudiant
+    // http://localhost:8089/tpfoyer/foyer/add-foyer
     @Operation(description = "ajouter un foyer à la base de données")
     @PostMapping("/add-foyer")
     public Foyer addEtudiant(@RequestBody Foyer f) {

@@ -58,4 +58,32 @@ public class BlocRestController {
         Bloc bloc = blocService.modifyBloc(b);
         return bloc;
     }
+
+    // http://localhost:8089/tpfoyer/bloc/ajouter-bloc-et-foyer
+    @PostMapping("/ajouter-bloc-et-foyer")
+    public Bloc createBlocAndFoyer(@RequestBody Bloc bloc) {
+        return blocService.createBlocAndFoyer(bloc);
+    }
+
+    // http://localhost:8089/tpfoyer/bloc/affecter-bloc-a-foyer/1/1
+    @PutMapping("/affecter-bloc-a-foyer/{bloc-id}/{foyer-id}")
+    public void assignBlocToFoyer(
+            @PathVariable("bloc-id") Long blocId,
+            @PathVariable("foyer-id") Long foyerId)
+    {
+        blocService.assignBlocToFoyer(blocId, foyerId);
+    }
+
+    // http://localhost:8089/tpfoyer/bloc/desaffecter-bloc-de-foyer/1
+    @PutMapping("/desaffecter-bloc-de-foyer/{bloc-id}")
+    public void desaffecterBlocDeFoyer(@PathVariable("bloc-id") Long blocId) {
+        blocService.desaffecterBlocDeFoyer(blocId);
+    }
+
+    // http://localhost:8089/tpfoyer/bloc/trouver-bloc-sans-foyer
+    @Operation(description = "trouver tous les blocs sans foyer")
+    @GetMapping("/trouver-bloc-sans-foyer")
+    public List<Bloc> findAllBlocWithoutFoyer() {
+        return blocService.findAllBlocWithoutFoyer();
+    }
 }

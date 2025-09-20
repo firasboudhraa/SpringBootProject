@@ -10,4 +10,10 @@ public interface IBlocService {
     public Bloc addBloc(Bloc b);
     public void removeBloc(Long blocId);
     public Bloc modifyBloc(Bloc bloc);
+
+    Bloc createBlocAndFoyer(Bloc bloc);
+    void assignBlocToFoyer(Long blocId, Long foyerId);
+    void desaffecterBlocDeFoyer(Long blocId);
+
+    List<Bloc> findAllBlocWithoutFoyer();
 }

@@ -4,14 +4,18 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tn.esprit.tpfoyer.entity.Bloc;
+import tn.esprit.tpfoyer.entity.Foyer;
 import tn.esprit.tpfoyer.repository.BlocRepository;
+import tn.esprit.tpfoyer.repository.FoyerRepository;
 
 import java.util.List;
 @Service
-@AllArgsConstructor
 public class BlocServiceImpl implements IBlocService {
     @Autowired
     public BlocRepository blocRepository;
+
+    @Autowired
+    private FoyerRepository foyerRepository;
     @Override
     public List<Bloc> retrieveAllBlocs() {
         return blocRepository.findAll();
@@ -35,5 +39,30 @@ public class BlocServiceImpl implements IBlocService {
     @Override
     public Bloc modifyBloc(Bloc bloc) {
         return blocRepository.save(bloc);
+    }
+
+    @Override
+    public Bloc createBlocAndFoyer(Bloc bloc) {
+        return blocRepository.save(bloc);
+    }
+
+    @Override
+    public void assignBlocToFoyer(Long blocId, Long foyerId) {
+      Bloc bloc = blocRepository.findById(blocId).get();
+      Foyer foyer = foyerRepository.findById(foyerId).get();
+      bloc.setFoyer(foyer);
+      blocRepository.save(bloc);
+    }
+
+    @Override
+    public void desaffecterBlocDeFoyer(Long blocId) {
+        Bloc bloc = blocRepository.findById(blocId).get();
+        bloc.setFoyer(null);
+        blocRepository.save(bloc);
+    }
+
+    @Override
+    public List<Bloc> findAllBlocWithoutFoyer() {
+        return blocRepository.findAllByFoyerIsNull();
     }
 }

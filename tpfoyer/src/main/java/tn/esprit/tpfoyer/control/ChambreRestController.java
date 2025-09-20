@@ -52,5 +52,19 @@ public class ChambreRestController {
     public Chambre modifyChambre(@RequestBody Chambre c) {
         Chambre chambre = chambreService.modifyChambre(c);
         return chambre;
-}
+    }
+
+    // http://localhost:8089/tpfoyer/chambre/create-chambre-and-reservation
+    @Operation(description = "ajouter une chambre et une réservation à la base de données")
+    @PostMapping("/create-chambre-and-reservation")
+    public Chambre createChambreAndReservation(@RequestBody Chambre chambre) {
+        return chambreService.createChambreAndReservation(chambre);
+    }
+
+    // http://localhost:8089/tpfoyer/chambre/trouver-chambre-selon-cin-etudiant/123456
+    @Operation(description = "trouver une chambre selon le cin de l'étudiant")
+    @GetMapping("/trouver-chambre-selon-cin-etudiant/{cin}")
+    public Chambre trouverChambreSelonCinEtudiant(@PathVariable("cin") long cin) {
+        return chambreService.trouverChambreSelonCinEtudiant(cin);
+    }
 }

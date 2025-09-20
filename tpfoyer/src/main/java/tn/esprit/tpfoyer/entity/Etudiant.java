@@ -27,6 +27,4 @@ public class Etudiant {
 
     @ManyToMany(mappedBy = "etudiants" , cascade = CascadeType.ALL)
     private Set<Reservation> reservations ;
-
-
 }
