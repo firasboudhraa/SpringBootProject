@@ -12,7 +12,6 @@ import tn.esprit.tpfoyer.service.IBlocService;
 import java.util.List;
 
 @Tag(name = "Gestion Bloc")
-
 @RestController
 @AllArgsConstructor
 @RequestMapping("/bloc")
@@ -86,4 +85,6 @@ public class BlocRestController {
     public List<Bloc> findAllBlocWithoutFoyer() {
         return blocService.findAllBlocWithoutFoyer();
     }
+
+
 }
