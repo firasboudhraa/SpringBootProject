@@ -66,11 +66,4 @@ public class BlocServiceImpl implements IBlocService {
         return blocRepository.findAllByFoyerIsNull();
     }
 
-    public List<Bloc> getAllBlocsByFoyer(Long foyerId) {
-        Foyer foyer = foyerRepository.findById(foyerId).orElse(null);
-        if (foyer != null) {
-            return blocRepository.findByFoyer(foyer);
-        }
-        return null;
-    }
 }
