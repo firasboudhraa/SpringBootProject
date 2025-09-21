@@ -22,16 +22,20 @@ pipeline {
             }
 
             stage('Build') {
-                steps {
-                    sh 'mvn clean install -DskipTests'
-                }
-            }
+                        steps {
+                            dir('tpfoyer') {
+                                sh 'mvn clean install -DskipTests'
+                            }
+                        }
+                    }
 
-            stage('Maven Package') {
-                steps {
-                    sh 'mvn package'
-                }
-            }
+                    stage('Maven Package') {
+                        steps {
+                            dir('tpfoyer') {
+                                sh 'mvn package'
+                            }
+                        }
+                    }
         }
     post {
         success {
