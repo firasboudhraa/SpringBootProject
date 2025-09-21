@@ -1,0 +1,44 @@
+pipeline {
+    agent any
+
+    triggers {
+        // Ce bloc dit à Jenkins de déclencher le pipeline à chaque webhook GitHub
+        githubPush()
+    }
+
+    tools {
+        jdk 'JAVA_HOME'        // Nom configuré dans "Global Tool Configuration"
+        maven 'M2_HOME'     // Nom configuré dans "Global Tool Configuration"
+    }
+
+    stages {
+            stage('Checkout') {
+                steps {
+                    withCredentials([string(credentialsId: 'github-token', variable: 'GITHUB_TOKEN')]) {
+                        git branch: 'main',
+                            url: "https://${GITHUB_TOKEN}@github.com/firasboudhraa/SpringBootProject.git"
+                    }
+                }
+            }
+
+            stage('Build') {
+                steps {
+                    sh 'mvn clean install -DskipTests'
+                }
+            }
+
+            stage('Maven Package') {
+                steps {
+                    sh 'mvn package'
+                }
+            }
+        }
+    post {
+        success {
+            echo "✅ Build succeeded, triggered by GitHub webhook!"
+        }
+        failure {
+            echo "❌ Build failed, check logs!"
+        }
+    }
+}
