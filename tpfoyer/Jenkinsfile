@@ -35,7 +35,7 @@ pipeline {
         stage('sonarQube Analysis') {
             steps {
               script {
-                withCredentials([secretText(credentialsId: 'sonarqube-token', variable: 'SONAR_TOKEN')]) {
+                withCredentials([string(credentialsId: 'sonarqube-token', variable: 'SONAR_TOKEN')]) {
                     dir('tpfoyer') {
                         sh """
                            mvn clean verify sonar:sonar
