@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import tn.esprit.tpfoyer.entity.Bloc;
-import tn.esprit.tpfoyer.entity.Chambre;
 import tn.esprit.tpfoyer.service.IBlocService;
 
 import java.util.List;
@@ -23,27 +22,24 @@ public class BlocRestController {
     @Operation(description = "récupérer tous les blocs de la base de données")
     @GetMapping("/retrieve-all-blocs")
     public List<Bloc> getBlocs() {
-        List<Bloc> listBlocs = blocService.retrieveAllBlocs();
-        return listBlocs;
+        return blocService.retrieveAllBlocs();
     }
 
     // http://localhost:8089/tpfoyer/bloc/retrieve-bloc/1
     @Operation(description = "récupérer par ID  les blocs de la base de données")
     @GetMapping("/retrieve-bloc/{bloc-id}")
     public Bloc retrieveBloc(@PathVariable("bloc-id") Long blocId) {
-        Bloc bloc = blocService.retrieveBloc(blocId);
-        return bloc;
+        return blocService.retrieveBloc(blocId);
     }
 
     // http://localhost:8089/tpfoyer/bloc/add-bloc
     @Operation(description = "ajouter un bloc à la base de données")
     @PostMapping("/add-bloc")
     public Bloc addBloc(@RequestBody Bloc b) {
-        Bloc bloc = blocService.addBloc(b);
-        return bloc;
+        return blocService.addBloc(b);
     }
 
-    // http://localhost:8089/tpfoyer/bloc/remove-bloc/{bloc-id}
+    // http://localhost:8089/tpfoyer/bloc/remove-bloc/bloc-id
     @Operation(description = "supprimer un bloc de la base de données")
     @DeleteMapping("/remove-bloc/{bloc-id}")
     public void removeBloc(@PathVariable("bloc-id") Long blocId) {
@@ -54,8 +50,7 @@ public class BlocRestController {
     @PutMapping("/modify-bloc")
     @Operation(description = "modifer un bloc de la base de données")
     public Bloc modifyBloc(@RequestBody Bloc b) {
-        Bloc bloc = blocService.modifyBloc(b);
-        return bloc;
+        return blocService.modifyBloc(b);
     }
 
     // http://localhost:8089/tpfoyer/bloc/ajouter-bloc-et-foyer

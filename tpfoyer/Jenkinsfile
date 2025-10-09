@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     tools {
-        jdk 'JAVA_HOME'        // Nom configuré dans "Global Tool Configuration"
-        maven 'M2_HOME'        // Nom configuré dans "Global Tool Configuration"
+        jdk 'JAVA_HOME'
+        maven 'M2_HOME'
     }
 
     stages {
@@ -28,6 +28,20 @@ pipeline {
             steps {
                 dir('tpfoyer') {
                     sh 'mvn package -DskipTests'
+                }
+            }
+        }
+
+        stage('sonarQube Analysis') {
+            steps {
+              script {
+                withCredentials([secretText(credentialsId: 'sonarqube-token', variable: 'SONAR_TOKEN')]) {
+                    dir('tpfoyer') {
+                        sh '
+                           mvn clean verify sonar:sonar
+                           -Dsonar.login=${SONAR_TOKEN}
+                           '
+                    }
                 }
             }
         }
