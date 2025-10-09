@@ -1,86 +1,85 @@
 pipeline {
-    agent any
+  agent any
 
-    tools {
-        jdk 'JAVA_HOME'
-        maven 'M2_HOME'
+  tools {
+    jdk 'JAVA_HOME'
+    maven 'M2_HOME'
+  }
+
+  environment {
+    SONAR_HOST_URL = 'http://localhost:9000' // ajuste si besoin
+  }
+
+  stages {
+    stage('Checkout') {
+      steps {
+        withCredentials([string(credentialsId: 'github-token', variable: 'GITHUB_TOKEN')]) {
+          git branch: 'main',
+              url: "https://${GITHUB_TOKEN}@github.com/firasboudhraa/SpringBootProject.git"
+        }
+      }
     }
 
-    stages {
-        stage('Checkout') {
-            steps {
-                withCredentials([string(credentialsId: 'github-token', variable: 'GITHUB_TOKEN')]) {
-                    git branch: 'main',
-                        url: "https://${GITHUB_TOKEN}@github.com/firasboudhraa/SpringBootProject.git"
-                }
-            }
+    stage('Build') {
+      steps {
+        dir('tpfoyer') {
+          sh 'mvn clean install -DskipTests'
         }
-
-        stage('Build') {
-            steps {
-                dir('tpfoyer') {
-                    sh 'mvn clean install -DskipTests'
-                }
-            }
-        }
-
-        stage('Maven Package') {
-            steps {
-                dir('tpfoyer') {
-                    sh 'mvn package -DskipTests'
-                }
-            }
-        }
-
-        stage('sonarQube Analysis') {
-            steps {
-              script {
-                withCredentials([string(credentialsId: 'sonarqube-token', variable: 'SONAR_TOKEN')]) {
-                    dir('tpfoyer') {
-                        sh """
-                           mvn -DskipTests=true -DskipITs=true
-                           clean verify sonar:sonar
-                           -Dsonar.host.url=http://localhost:9000
-                           -Dsonar.login=${SONAR_TOKEN}
-                         """
-                    }
-                }
-              }
-            }
-        }
-
-        stage("Docker Build") {
-            steps {
-                dir('tpfoyer') {
-                    sh 'docker build -t firasboudhraa/tpfoyer .'
-                }
-                sh 'docker images'
-            }
-        }
-
-        stage("Docker Login") {
-            steps {
-                script {
-                    withCredentials([usernamePassword(credentialsId: 'DOCKER_CREDENTIALS', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-                        sh 'echo $DOCKER_PASSWORD | docker login --username $DOCKER_USERNAME --password-stdin'
-                    }
-                }
-            }
-        }
-
-        stage("Docker Push") {
-            steps {
-                sh 'docker push firasboudhraa/tpfoyer'
-            }
-        }
+      }
     }
 
-    post {
-        success {
-            echo "✅ Build succeeded, triggered by GitHub webhook!"
+    stage('Maven Package') {
+      steps {
+        dir('tpfoyer') {
+          sh 'mvn package -DskipTests'
         }
-        failure {
-            echo "❌ Build failed, check logs!"
-        }
+      }
     }
+
+    stage('sonarQube Analysis') {
+      steps {
+        script {
+          withCredentials([string(credentialsId: 'sonarqube-token', variable: 'SONAR_TOKEN')]) {
+            dir('tpfoyer') {
+              sh '''
+                set -e
+                mvn clean verify sonar:sonar \
+                  -DskipTests=true -DskipITs=true \
+                  -Dsonar.host.url=$SONAR_HOST_URL \
+                  -Dsonar.login=$SONAR_TOKEN
+              '''
+            }
+          }
+        }
+      }
+    }
+
+    stage('Docker Build') {
+      steps {
+        dir('tpfoyer') {
+          sh 'docker build -t firasboudhraa/tpfoyer .'
+        }
+        sh 'docker images'
+      }
+    }
+
+    stage('Docker Login') {
+      steps {
+        withCredentials([usernamePassword(credentialsId: 'DOCKER_CREDENTIALS', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+          sh 'echo "$DOCKER_PASSWORD" | docker login --username "$DOCKER_USERNAME" --password-stdin'
+        }
+      }
+    }
+
+    stage('Docker Push') {
+      steps {
+        sh 'docker push firasboudhraa/tpfoyer'
+      }
+    }
+  }
+
+  post {
+    success { echo '✅ Build succeeded, triggered by GitHub webhook!' }
+    failure { echo '❌ Build failed, check logs!' }
+  }
 }
