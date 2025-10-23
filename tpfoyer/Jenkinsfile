@@ -76,6 +76,19 @@ pipeline {
         sh 'docker push firasboudhraa/tpfoyer'
       }
     }
+
+    stage('Minikube Deploy (minikube → devops)') {
+      steps {
+        sh '''
+          set -e
+          kubectl config use-context minikube >/dev/null 2>&1 || true
+          kubectl get ns devops >/dev/null 2>&1 || kubectl create ns devops
+          kubectl -n devops apply -f /home/vagrant/mysql-deployments.yaml
+          kubectl -n devops apply -f /home/vagrant/spring-deployments.yaml
+          kubectl -n devops get pods
+        '''
+      }
+    }
   }
 
   post {
